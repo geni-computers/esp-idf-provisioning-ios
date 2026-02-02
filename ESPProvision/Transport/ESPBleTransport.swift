@@ -289,6 +289,15 @@ extension ESPBleTransport: CBCentralManagerDelegate {
         if let peripheralName = data["kCBAdvDataLocalName"] as? String ?? peripheral.name  {
             if peripheralName.lowercased().hasPrefix(deviceNamePrefix.lowercased()) {
                 let newEspDevice  = ESPDevice(name: peripheralName, security: .secure, transport: .ble, advertisementData: data)
+
+                // Extract MAC address from manufacturer data (6 bytes)
+                if let mfgData = data[CBAdvertisementDataManufacturerDataKey] as? Data,
+                   mfgData.count >= 6 {
+                    newEspDevice.macAddress = mfgData.prefix(6)
+                        .map { String(format: "%02X", $0) }
+                        .joined(separator: ":")
+                }
+
                 espressifPeripherals[peripheralName] = newEspDevice
                 newEspDevice.peripheral = peripheral
             }

@@ -98,7 +98,7 @@ open class ESPDevice {
     /// SoftAp transport layer.
     public var espSoftApTransport: ESPSoftAPTransport!
     /// Peripheral object in case of BLE device.
-    var peripheral: CBPeripheral!
+    public var peripheral: CBPeripheral!
     /// Connection status of device.
     var connectionStatus:ESPSessionStatus = .disconnected
     /// Completion handler for scan Wi-Fi list.
@@ -130,7 +130,9 @@ open class ESPDevice {
     /// Advertisement data for BLE device
     /// This property is read-only
     public private(set) var advertisementData:[String:Any]?
-    
+    /// MAC address extracted from manufacturer data
+    public var macAddress: String?
+
     private var transportLayer: ESPCommunicable!
     private var provision: ESPProvision!
     private var softAPPassword:String?
